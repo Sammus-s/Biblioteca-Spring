@@ -23,9 +23,8 @@ public class LivroController {
     @ResponseBody
     @RequestMapping("/livros")
     public List<Livro> Listar(){
-        Livro livro = new Livro(123L, "Controller - Spring", 1, "Vitor", Categoria.INFORMATICA, Modelo.EBOOK);
-
-        return Arrays.asList(livro, livro, livro);
+        List<Livro> livros = livroRepository.findAll();
+        return livros;
     }
 
     @ResponseBody
