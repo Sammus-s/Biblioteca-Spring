@@ -1,5 +1,6 @@
 package com.example.livro.controller;
 
+import com.example.livro.controller.dto.LivroDTO;
 import com.example.livro.entity.Livro;
 import com.example.livro.repository.LivroRepository;
 import jakarta.transaction.Transactional;
@@ -9,37 +10,32 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/livros")
 public class LivroController {
-    //TODO refatorar
-
     @Autowired
     private LivroRepository livroRepository;
 
-    @ResponseBody
-    @RequestMapping("/livros")
-    public List<Livro> Listar(){
+    @GetMapping
+    public List<LivroDTO> Listar(){
         List<Livro> livros = livroRepository.findAll();
-        return livros;
+        return LivroDTO.converter(livros);
     }
 
-    @ResponseBody
     @Transactional
-    @RequestMapping(path = "/livros", method = RequestMethod.POST)
+    @PostMapping
     public void salvar(@RequestBody Livro livro){
         livroRepository.save(livro);
     }
 
-    @ResponseBody
     @Transactional
-    @RequestMapping(path = "/livros", method = RequestMethod.PUT)
+    @PutMapping
     public void atualizar(@RequestBody Livro livro){
         livroRepository.save(livro);
     }
 
-    @ResponseBody
     @Transactional
-    @RequestMapping(path = "/livros/{isbn}", method = RequestMethod.DELETE)
+    @DeleteMapping
     public void deletar(@PathVariable Long isbn) {
         livroRepository.deleteById(isbn);
     }
