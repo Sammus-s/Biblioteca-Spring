@@ -1,6 +1,7 @@
 package com.example.livro.controller;
 
 import com.example.livro.controller.dto.LivroDTO;
+import com.example.livro.controller.dto.LivroFormDTO;
 import com.example.livro.entity.Livro;
 import com.example.livro.repository.LivroRepository;
 import jakarta.transaction.Transactional;
@@ -24,8 +25,10 @@ public class LivroController {
 
     @Transactional
     @PostMapping
-    public void salvar(@RequestBody Livro livro){
+    public LivroDTO salvar(@RequestBody LivroFormDTO form){
+        Livro livro = form.converter();
         livroRepository.save(livro);
+        return new LivroDTO(livro);
     }
 
     @Transactional
