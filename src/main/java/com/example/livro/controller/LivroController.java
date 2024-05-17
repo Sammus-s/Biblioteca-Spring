@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +52,12 @@ public class LivroController {
     }
 
     @Transactional
-    @DeleteMapping
+    @DeleteMapping("/{isbn}")
     public void deletar(@PathVariable Long isbn) {
-        livroRepository.deleteById(isbn);
+        final Optional<Livro> optLivro = livroRepository.findById(isbn);
+
+        if (optLivro.isPresent()){
+            livroRepository.deleteById(isbn);
+        }
     }
 }
