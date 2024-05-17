@@ -1,5 +1,7 @@
 package com.example.livro.controller;
 
+import com.example.livro.controller.dto.AtualizaLivroFormDTO;
+import com.example.livro.controller.dto.DetalhesLivroDTO;
 import com.example.livro.controller.dto.LivroDTO;
 import com.example.livro.controller.dto.LivroFormDTO;
 import com.example.livro.entity.Livro;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/livros")
@@ -32,9 +35,19 @@ public class LivroController {
     }
 
     @Transactional
-    @PutMapping
-    public void atualizar(@RequestBody Livro livro){
-        livroRepository.save(livro);
+    @PutMapping("/{isbn}")
+    public DetalhesLivroDTO atualizar(@PathVariable Long isbn, @RequestBody AtualizaLivroFormDTO form){
+        final Optional<Livro> optLivro = livroRepository.findById(isbn);
+
+        if (optLivro.isPresent()){
+            Livro livro = optLivro.get();
+            form.atualiza(livro);
+            livroRepository.save(livro);
+            return new DetalhesLivroDTO(livro);
+        }
+
+        System.out.println("Livro não encontrado");
+        return null;
     }
 
     @Transactional
